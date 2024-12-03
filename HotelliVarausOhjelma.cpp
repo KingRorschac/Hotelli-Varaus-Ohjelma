@@ -1,6 +1,7 @@
 // Hotelli Harjoitustehtävä
 // Joonas Akers
 
+
 #include<iostream>
 #include<fstream>
 #include<string>
