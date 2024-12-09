@@ -1,5 +1,6 @@
 // Hotelli Harjoitustehtävä
 // Joonas Akers
+// 4 pistettä
 
 
 #include<iostream>
@@ -38,6 +39,7 @@ struct varaus {
 int randn(int minimi, int maksimi);
 int hintalasku(int tyyppi, int yöt, int alennus);
 int haku(string type, string name, int roomNumber, vector<varaus> varaukset);
+int vastausTarkistus(string kysymys);
 
 
 int main() {
@@ -121,23 +123,23 @@ int main() {
         pituus = stoi(tempPituus);
 
         // hakee tallennettuja tarkistu booleaneja
-        for (int i = 0; i < 150; i++) {
+        for (int i = 0; i < 151; i++) {
             varattu1hh[i] = stoi(debug[i+ 4]);
         }
-        for (int i = 0; i < 150; i++) {
-            varattu2hh[i] = stoi(debug[i + 154]);
+        for (int i = 0; i < 151; i++) {
+            varattu2hh[i] = stoi(debug[i + 155]);
         }
 
         //tekee varaukset
         for (int i = 0; i < pituus; i++) {
             varaus tempVaraus;
-            tempVaraus.nimi = debug[i + 305];
-            tempVaraus.huoneNumero = stoi(debug[i + pituus + 305]);
-            tempVaraus.huoneTyyppi = stoi(debug[i + (pituus*2) + 305]);
-            tempVaraus.alennus = stoi(debug[i + (pituus * 3) + 305]);
-            tempVaraus.yöt = stoi(debug[i + (pituus * 4) + 305]);
-            tempVaraus.varausNumero = stoi(debug[i + (pituus * 5) + 305]);
-            tempVaraus.hinta = stoi(debug[i + (pituus * 6) + 305]);
+            tempVaraus.nimi = debug[i + 306];
+            tempVaraus.huoneNumero = stoi(debug[i + pituus + 306]);
+            tempVaraus.huoneTyyppi = stoi(debug[i + (pituus*2) + 306]);
+            tempVaraus.alennus = stoi(debug[i + (pituus * 3) + 306]);
+            tempVaraus.yöt = stoi(debug[i + (pituus * 4) + 306]);
+            tempVaraus.varausNumero = stoi(debug[i + (pituus * 5) + 306]);
+            tempVaraus.hinta = stoi(debug[i + (pituus * 6) + 306]);
             varaukset.push_back(tempVaraus);
         }
     }
@@ -151,7 +153,7 @@ int main() {
     }
 
     cout << "Huoneiden määrä: " << huoneMäärä << endl << "1hh: " << huoneMäärä1hh << endl << "2hh: " << huoneMäärä2hh << endl;
-    
+
     // pääohjelma
     for (int k = 0; k < 1; k++) {
         cout << "Mitä haluat tehdä? " << endl << "V = Varaa Huone. " << endl << "P = Poista Varaus. " << endl << "N = Näytä Varaukset. " << endl << 
@@ -169,8 +171,7 @@ int main() {
                 getline(cin, tempVaraus.nimi);
 
                 for (int i = 0; i < 1; i++) {
-                    cout << "Haluaisitko yhden hengen huone (1) tai kahden hengen huone (2)? ";
-                    cin >> tempVaraus.huoneTyyppi;
+                    tempVaraus.huoneTyyppi = vastausTarkistus("Haluaisitko yhden hengen huone (1) tai kahden hengen huone (2)? ");
                     if (tempVaraus.huoneTyyppi != 1 && tempVaraus.huoneTyyppi != 2) {
                         i--;
                         cout << "ERROR ''" << tempVaraus.huoneTyyppi << "'' ei ole validi vastaus" << endl;
@@ -178,21 +179,19 @@ int main() {
                 }
 
                 for (int i = 0; i < 1; i++) {
-                    cout << "Mikä huonenumero haluaisitte? ";
-                    cin >> tempHuoneNumero;
-                    if (tempHuoneNumero < 1 || tempHuoneNumero > huoneMäärä / 2) {
-                        i--;
-                        cout << "ERROR ''" << tempHuoneNumero << "'' ei ole validi vastaus" << endl;
+                    for (int h = 0; h < 1; h++) {
+                        tempHuoneNumero = vastausTarkistus("Mikä huonenumero haluaisitte? ");
+                        if (tempHuoneNumero < 1 || tempHuoneNumero > huoneMäärä / 2) {
+                            h--;
+                            cout << "ERROR ''" << tempHuoneNumero << "'' ei ole validi vastaus" << endl;
+                        }
                     }
-                }
-
-                for (int i = 0; i < 1; i++) {
                     if (tempVaraus.huoneTyyppi == 1 && varattu1hh[tempHuoneNumero] == 1) {
-                        cout << "Huone on Varattu, valitse toinen huone";
+                        cout << "Huone on Varattu, valitse toinen huone." << endl;
                         i--;
                     }
                     if (tempVaraus.huoneTyyppi == 2 && varattu2hh[tempHuoneNumero] == 1) {
-                        cout << "Huone on Varattu, valitse toinen huone";
+                        cout << "Huone on Varattu, valitse toinen huone." << endl;
                         i--;
                     }
                 }
@@ -204,8 +203,7 @@ int main() {
                 tempVaraus.alennus = randNum * 10;
 
                 for (int i = 0; i < 1; i++) {
-                    cout << "Kuinka monta yötä olette täällä? ";
-                    cin >> tempVaraus.yöt;
+                    tempVaraus.yöt = vastausTarkistus("Kuinka monta yötä olette täällä? ");
                     if (tempVaraus.yöt < 1) {
                         i--;
                         cout << "ERROR ''" << tempVaraus.yöt << "'' ei ole validi vastaus" << endl;
@@ -287,8 +285,7 @@ int main() {
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
                 if (etsi == "v" || etsi == "V" || etsi == "numero" || etsi == "Numero" || etsi == "NUMERO") {
-                    cout << "Mikä varaus etsit (varausnumero)? ";
-                    cin >> varauksenNro; varaajanNimi = "null";
+                    varauksenNro = vastausTarkistus("Mikä varaus etsit (varausnumero)? "); varaajanNimi = "null";
                     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 }
 
@@ -368,11 +365,11 @@ int main() {
                 if (outfile.is_open())
                 {
                     // tallenna varausten määrät
-                    outfile << huoneMäärä << endl << huoneMäärä1hh << endl << huoneMäärä2hh << endl << (varaukset.size()/10);
+                    outfile << huoneMäärä << endl << huoneMäärä1hh << endl << huoneMäärä2hh << endl << varaukset.size() << endl;
 
                     // tallenna tarkistuslistat
                     for (int i = 0; i < varattu1hh.size(); i++) {
-                        outfile << varattu2hh[i] << endl;
+                        outfile << varattu1hh[i] << endl;
                     }
                     for (int i = 0; i < varattu2hh.size(); i++) {
                         outfile << varattu2hh[i] << endl;
@@ -489,4 +486,23 @@ int haku(string type, string name, int roomNumber, vector<varaus> varaukset) {
         }
     }
     return etsittäväVaraus;
+}
+
+int vastausTarkistus(string kysymys) {
+    int numero = 0;
+    bool valiidiVastaus = false;
+
+    do {
+        cout << kysymys;
+        cin >> numero;
+
+        if (!(valiidiVastaus = cin.good())) {
+            cout << "Vastauksesi ei ole valiidi, anna uusi." << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+
+    } while (!valiidiVastaus);
+
+    return numero;
 }
